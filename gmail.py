@@ -5,8 +5,8 @@ Created on 21-Oct-2018
 '''
 import smtplib
 
-gmail_user = 'dipin.arora99@gmail.com'  
-gmail_password = 'kannakha98'
+gmail_user = ''    #enter you email here
+gmail_password = ''   #enter your password here
 
 sent_from = gmail_user 
 to =[] 
