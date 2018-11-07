@@ -9,8 +9,8 @@ import datetime
 
 now=datetime.datetime.now()
 
-account_sid = 'AC1dc5a5e8546e94744b903e2dd8ac8a94' 
-auth_token = '8f7a4a62485697cc5f57225ad8f2ea70' 
+account_sid = ''   # add your account sid here
+auth_token = '' #add your authentication token here
 client = Client(account_sid, auth_token)
 
 num=0
