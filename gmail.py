@@ -1,7 +1,7 @@
 '''
 Created on 21-Oct-2018
 
-@author: Dipin Arora
+@author: DipinArora
 '''
 import smtplib
 
