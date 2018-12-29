@@ -1,7 +1,7 @@
 '''
 Created on 21-Oct-2018
 
-@author: Home
+@author: Dipin Arora
 '''
 import sqlite3
 #with sqlite3.connect('login.db') as connection:
