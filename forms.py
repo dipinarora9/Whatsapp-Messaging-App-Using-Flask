@@ -1,7 +1,7 @@
 '''
 Created on 21-Oct-2018
 
-@author: Dipin Aror
+@author: Dipin Arora
 '''
 from flask_wtf import Form
 
