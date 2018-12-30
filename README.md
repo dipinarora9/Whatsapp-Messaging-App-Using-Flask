@@ -7,7 +7,7 @@ Please add your gmail credentials in gmail.py file and twilio credentials in wha
 <html>
   <head>
     <link rel="icon" href="https://drive.google.com/file/d/1JFck-EaN9leLjXUCL93rkFgxkDql7XiW/view?usp=sharing">
-<link rel="shortcut icon" href="http://www.brianshim.com/webtricks/wp-content/uploads/2012/11/stars_favicon.png" type="image/x-icon" />
+    <link rel="shortcut icon" href="http://www.brianshim.com/webtricks/wp-content/uploads/2012/11/stars_favicon.png" type="image/x-icon" />
     <iframe src="https://drive.google.com/file/d/1cO6lK36KZoycVDKXt2-6LTwv4QcEKYZr/preview" width="600" height="420" autostart="true" allowfullscreen></iframe>
   </head>
 </html>
