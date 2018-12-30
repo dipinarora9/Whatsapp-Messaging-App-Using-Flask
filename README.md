@@ -7,6 +7,6 @@ Please add your gmail credentials in gmail.py file and twilio credentials in wha
 <html>
   <head>
     <link rel="icon" href="https://drive.google.com/file/d/1JFck-EaN9leLjXUCL93rkFgxkDql7XiW/view?usp=sharing">
-<iframe src="https://drive.google.com/file/d/1cO6lK36KZoycVDKXt2-6LTwv4QcEKYZr/preview" width="600" height="420" autostart="true"  allowfullscreen></iframe>
-    </head>
+    <iframe src="https://drive.google.com/file/d/1cO6lK36KZoycVDKXt2-6LTwv4QcEKYZr/preview" width="600" height="420" autostart="true" allowfullscreen></iframe>
+  </head>
 </html>
