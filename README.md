@@ -1,4 +1,4 @@
-# Whatsapp-Web-App-Using-Flask
+# Whatsapp-Messaging-App-Using-Flask
 Hello!
 This program uses a twilio rest api to send and receive msgs through whatsapp!
 Run sql.py file first to create a database file.
