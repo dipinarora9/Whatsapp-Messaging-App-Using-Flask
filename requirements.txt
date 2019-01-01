@@ -1,0 +1,7 @@
+pip install these -
+
+twilio
+flask
+flask-wtf
+wtforms
+requests
