@@ -1,14 +1,18 @@
+#! python3
 '''
 Created on 21-Oct-2018
 
 @author: Dipin Arora
 '''
 
-from flask import Flask, request, redirect, url_for, render_template, session, flash
-import gmail, whatsappmsg
-from functools import wraps
-from forms import LoginForm, RegisterForm, num_and_msg
 import sqlite3
+from functools import wraps
+
+from flask import Flask, request, redirect, url_for, render_template, session, flash
+
+import gmail
+import whatsappmsg
+from forms import LoginForm, RegisterForm, num_and_msg
 
 conn = sqlite3.connect("login.db")
 cur = conn.cursor()
@@ -42,7 +46,7 @@ def login():
     error = None
     form = LoginForm(request.form)
     if request.method == "POST":
-        user = cur.execute("SELECT username FROM login;")
+        user = cur.execute('''SELECT username FROM login;''')
         username = user.fetchall()
         passw = cur.execute("SELECT password FROM login")
         password = passw.fetchall()
