@@ -5,27 +5,19 @@ Created on 21-Oct-2018
 '''
 from flask_wtf import Form
 
-from wtforms import TextField, PasswordField, IntegerField
+from wtforms import StringField, PasswordField, IntegerField
 
 from wtforms.validators import DataRequired, Length, Email, EqualTo
 
 
-
-
-
 class LoginForm(Form):
-
-    username = TextField('Username', validators=[DataRequired()])
+    username = StringField('Username', validators=[DataRequired()])
 
     password = PasswordField('Password', validators=[DataRequired()])
 
 
-
-
-
 class RegisterForm(Form):
-
-    username = TextField(
+    username = StringField(
 
         'username',
 
@@ -33,14 +25,14 @@ class RegisterForm(Form):
 
     )
 
-    email = TextField(
+    email = StringField(
 
         'email',
 
         validators=[DataRequired(), Email(message=None), Length(min=6, max=40)]
 
     )
-    
+
     number = IntegerField(
 
         'number',
@@ -68,12 +60,9 @@ class RegisterForm(Form):
         ]
 
     )
-    
-    
 
-class num_and_msg(Form):
-    
+
+class NumAndMsg(Form):
     num = IntegerField("num", validators=[DataRequired()])
-    
-    mes = TextField("message", validators=[DataRequired()])
-    
+
+    mes = StringField("message", validators=[DataRequired()])

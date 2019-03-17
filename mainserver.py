@@ -12,7 +12,8 @@ from flask import Flask, request, redirect, url_for, render_template, session, f
 
 import gmail
 import whatsappmsg
-from forms import LoginForm, RegisterForm, num_and_msg
+
+from forms import LoginForm, RegisterForm, NumAndMsg
 
 conn = sqlite3.connect("login.db")
 cur = conn.cursor()
@@ -46,7 +47,7 @@ def login():
     error = None
     form = LoginForm(request.form)
     if request.method == "POST":
-        user = cur.execute('''SELECT username FROM login;''')
+        user = cur.execute('''SELECT username FROM login''')
         username = user.fetchall()
         passw = cur.execute("SELECT password FROM login")
         password = passw.fetchall()
@@ -98,10 +99,10 @@ def register():
 def whatsapp():
     car = None
     msg = ''
-    form = num_and_msg(request.form)
+    form = NumAndMsg(request.form)
     if request.method == "POST":
-        msg = whatsappmsg.read_message(form.num.data)
         whatsappmsg.send_message(form.num.data, form.mes.data)
+        msg = whatsappmsg.read_message(form.num.data)
         print(form.mes)
     else:
         pass
