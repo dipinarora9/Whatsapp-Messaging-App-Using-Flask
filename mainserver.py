@@ -5,7 +5,7 @@ Created on 21-Oct-2018
 @author: Dipin Arora
 '''
 
-import sqlite3
+import os
 from functools import wraps
 
 from flask import Flask, request, redirect, url_for, render_template, session, flash
@@ -13,13 +13,26 @@ from flask import Flask, request, redirect, url_for, render_template, session, f
 import gmail
 import whatsappmsg
 
-from forms import LoginForm, RegisterForm, NumAndMsg
-
-conn = sqlite3.connect("login.db")
-cur = conn.cursor()
+from forms import LoginForm, RegisterForm
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
-app.secret_key = "dipin"
+app.secret_key = os.urandom(12)
+app.config["SQLALCHEMY_DATABASE_URI"] = 'sqlite:///userData.db'
+
+db = SQLAlchemy(app)
+
+from model import Table
+
+if 'userData.db' is None:
+    print('Creating Database')
+    db.create_all()
+
+if Table.query.filter_by(username='admin', password='admin').first() is None:
+    admin = Table(username='admin', password='admin', email='admin@gmail.com', phoneNo='123456789')
+    db.session.add(admin)
+    db.session.commit()
+currentUser = {}
 
 
 def login_required(f):
@@ -42,28 +55,18 @@ def welcome():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    conn = sqlite3.connect("login.db")
-    cur = conn.cursor()
-    error = None
     form = LoginForm(request.form)
     if request.method == "POST":
-        user = cur.execute('''SELECT username FROM login''')
-        username = user.fetchall()
-        passw = cur.execute("SELECT password FROM login")
-        password = passw.fetchall()
-        for i in username:
-            for j in password:
-                if form.username.data == i[0] and form.password.data == j[0]:
-                    session["logged_in"] = True
-                    flash("You were logged In!")
-                    return redirect("/whatsapp")
-                else:
-                    pass
-
+        user = Table.query.filter_by(username=form.username.data, password=form.password.data).first()
+        if user is not None:
+            session["logged_in"] = True
+            currentUser['currentUser'] = user
+            flash("You were logged In!")
+            return redirect("/whatsapp")
         else:
-            error = "Invalid Credentials. Please try again"
+            return "Invalid Credentials. Please try again"
 
-    return render_template("login.html", form=form, error=error)
+    return render_template("login.html", form=form)
 
 
 @app.route('/logout')
@@ -76,20 +79,20 @@ def logout():
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
-    conn = sqlite3.connect("login.db")
-    cur = conn.cursor()
     form = RegisterForm(request.form)
     if form.validate_on_submit():
         gmail.mail(form.email.data, form.username.data)
+        newUser = Table(username=form.username.data, email=form.email.data, password=form.password.data,
+                        phoneNo=form.number.data)
 
-        cur.execute(""" INSERT INTO login VALUES (?,?,?,?)""",
-                    (form.username.data, form.email.data, form.password.data, form.number.data))
+        try:
+            db.session.add(newUser)
+            db.session.commit()
+            flash("You are Registered Server Side. Please check your mail for further instructions.")
 
-        conn.commit()
-        conn.close()
-        flash("You are Registered Server Side. Please check your mail for further instructions.")
-
-        return redirect('/login')
+            return redirect('/login')
+        except:
+            return 'error saving name'
 
     return render_template('register.html', form=form)
 
@@ -97,16 +100,18 @@ def register():
 @app.route("/whatsapp", methods=['GET', 'POST'])
 @login_required
 def whatsapp():
-    car = None
     msg = ''
-    form = NumAndMsg(request.form)
+    user = currentUser['currentUser']
+    num = os.environ.get('twilioNo')
     if request.method == "POST":
-        whatsappmsg.send_message(form.num.data, form.mes.data)
-        msg = whatsappmsg.read_message(form.num.data)
-        print(form.mes)
+        try:
+            whatsappmsg.send_message(user.phoneNo, request.form['mes'])
+            msg = whatsappmsg.read_message(user.phoneNo)
+        except:
+            redirect('/whatsapp')
     else:
         pass
-    return render_template("whatsappmsgs.html", form=form, car=car, msg=msg)
+    return render_template("whatsappmsgs.html", user=user, msg=msg, num=num)
 
 
 if __name__ == "__main__":

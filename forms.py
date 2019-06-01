@@ -45,7 +45,7 @@ class RegisterForm(Form):
 
         'password',
 
-        validators=[DataRequired(), Length(min=5, max=25)]
+        validators=[DataRequired(), Length(min=5, max=20)]
 
     )
 
@@ -62,7 +62,3 @@ class RegisterForm(Form):
     )
 
 
-class NumAndMsg(Form):
-    num = IntegerField("num", validators=[DataRequired()])
-
-    mes = StringField("message", validators=[DataRequired()])

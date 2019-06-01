@@ -4,9 +4,10 @@ Created on 21-Oct-2018
 @author: Dipin Arora
 '''
 import smtplib
+import os
 
-gmail_user = ''  # TODO: enter you email here
-gmail_password = ''  # TODO: enter your password here
+gmail_user = str(os.environ.get('emailId'))
+gmail_password = str(os.environ.get('password'))
 
 sent_from = gmail_user
 to = []
