@@ -7,7 +7,6 @@ Created on 21-Oct-2018
 from mainserver import db
 import datetime
 
-
 class Table(db.Model):
     id = db.Column(db.INTEGER, primary_key=True)
     username = db.Column(db.String(25), nullable=False)

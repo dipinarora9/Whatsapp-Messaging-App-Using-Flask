@@ -18,21 +18,21 @@ from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.secret_key = os.urandom(12)
-app.config["SQLALCHEMY_DATABASE_URI"] = 'sqlite:///userData.db'
+app.config["SQLALCHEMY_DATABASE_URI"] = 'sqlite:///allData.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
+#
+# if 'userData.db' is None:
+#     print('Creating Database')
+#     db.create_all()
 
 from model import Table
-
-if 'userData.db' is None:
-    print('Creating Database')
-    db.create_all()
 
 if Table.query.filter_by(username='admin', password='admin').first() is None:
     admin = Table(username='admin', password='admin', email='admin@gmail.com', phoneNo='123456789')
     db.session.add(admin)
     db.session.commit()
-currentUser = {}
 
 
 def login_required(f):
@@ -60,9 +60,8 @@ def login():
         user = Table.query.filter_by(username=form.username.data, password=form.password.data).first()
         if user is not None:
             session["logged_in"] = True
-            currentUser['currentUser'] = user
             flash("You were logged In!")
-            return redirect("/whatsapp")
+            return redirect(f"/whatsapp/{user.id}")
         else:
             return "Invalid Credentials. Please try again"
 
@@ -97,21 +96,22 @@ def register():
     return render_template('register.html', form=form)
 
 
-@app.route("/whatsapp", methods=['GET', 'POST'])
+@app.route("/whatsapp/<int:id>", methods=['GET', 'POST'])
 @login_required
-def whatsapp():
-    msg = ''
-    user = currentUser['currentUser']
-    num = os.environ.get('twilioNo')
+def whatsapp(id):
+    receivedMsg = ''
+    user = Table.query.filter_by(id=id).first()
+    twilionNum = os.environ.get('twilioNo')
     if request.method == "POST":
         try:
             whatsappmsg.send_message(user.phoneNo, request.form['mes'])
-            msg = whatsappmsg.read_message(user.phoneNo)
+            receivedMsg = whatsappmsg.read_message(user.phoneNo)
         except:
             redirect('/whatsapp')
     else:
         pass
-    return render_template("whatsappmsgs.html", user=user, msg=msg, num=num)
+    if receivedMsg == '': receivedMsg = 'No previous message'
+    return render_template("whatsappmsgs.html", currentUser=user, receivedMsg=receivedMsg, twilionNum=twilionNum)
 
 
 if __name__ == "__main__":

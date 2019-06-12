@@ -11,9 +11,9 @@
     <div class="container">
       <h1>Welcome to Whatsapp!</h1>
       <br>
-      <h2> {{ form.num.data }} : {{ msg }} </h2>
+      <h2> {{ twilionNum }} : {{ receivedMsg }} </h2>
       <form action="" role="form" method="POST">
-        <input id="num" type="number" placeholder="Phone Number" name="num" value="{{ request.form.num }}" >
+          <h3> +91{{ currentUser.phoneNo }}</h3>
         <input id="mes" type="text" placeholder="Message" name="mes" value="{{ request.form.mes }}" >
         <input id="submit" type="submit" value="Send!">
 	  </form>
